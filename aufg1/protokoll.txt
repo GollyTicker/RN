@@ -1,0 +1,75 @@
+
+
+
+
+Teil 1:
+
+1. ifconfig:
+    Beispiel:
+    en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+           ether 78:31:c1:c1:de:70
+           inet6 fe80::7a31:c1ff:fec1:de70%en0 prefixlen 64 scopeid 0x4
+           inet 141.22.68.70 netmask 0xffffe000 broadcast 141.22.95.255
+           nd6 options=1<PERFORMNUD>
+           media: autoselect
+           status: active
+    ;
+
+    <interface name>: <interface status>, < broadcast, transmission, multicast status > <maximale übertragungseinheit>
+            <mac adresse>
+            (<IP adresse> <maske>)+
+            <weitere Einstellungen>
+            <media>
+            <status>
+    ;
+
+
+2.
+    Google:
+    ping -c 1 -s 1000 www.google.de
+    PING www.google.de (173.194.113.159): 1000 data bytes
+
+    --- www.google.de ping statistics ---
+    1 packets transmitted, 0 packets received, 100.0% packet loss
+
+
+    Haw-Hamburg:
+    ping -c 1 -s 1000 www.haw-hamburg.de
+    PING haw01.rz.tu-harburg.de (134.28.219.2): 1000 data bytes
+
+    --- haw01.rz.tu-harburg.de ping statistics ---
+    1 packets transmitted, 0 packets received, 100.0% packet loss
+
+    Durchschnitt aus 10x zu Swaneets Laptop:
+    Standartzeile:
+    ping -c 1 -s 1000 141.22.80.68
+    PING 141.22.80.68 (141.22.80.68): 1000 data bytes
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=12.169 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=13.456 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=13.514 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=30.823 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=29.337 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=8.101 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=5.484 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=10.899 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=5.854 ms
+    1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=4.192 ms
+    Durchschnittlich:
+    13.383 ms
+
+3.
+    Befehl: (http://www.cyberciti.biz/faq/find-out-which-service-listening-specific-port/)
+    sudo lsof -i :9400
+
+    Auf Post 9400 war leider kein Programm angemeldet.
+    wir haben laso stattdessen Port 80 untersucht.
+    79067 Allquantor  122u  IPv4 0xf5655bc5cb267d5      0t0  TCP ws-68-70.haw-1x.haw-hamburg.de:57004->ham02s11-in-f13.1e100.net:http (ESTABLISHED)
+    .... (mehr für weitere Webseiten)
+
+    Chrome.exe verwendet TCP in seiner Transportschicht.
+
+
+
+4. 
+
+
