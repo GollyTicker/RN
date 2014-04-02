@@ -9,8 +9,9 @@ public class Server {
     public static void  main(String[] args){
 
         try {
-            //convert arg[] to int
-            ServerSocket welcomeSocket = new ServerSocket(Integer.parseInt(args[0]));
+           // int port = Integer.parseInt(args[0]);
+            int port = 4444;
+            ServerSocket welcomeSocket = new ServerSocket(port);
 
             //loop
             while(true){
@@ -29,7 +30,7 @@ public class Server {
 
                 System.out.println("DAS IST INPUT STREAM;" + sTest);
                 out.print(sTest);
-
+                out.flush();
                 clientSocket.close();
             }
 

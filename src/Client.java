@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -10,13 +11,15 @@ import java.net.Socket;
 public class Client {
     public static void main(String[] args) {
 
-        String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
+        int port = 4444;
+       // String hostName = args[0];
+       // int portNumber = Integer.parseInt(args[1]);
+        String hostName = "127.0.0.1";
 
         try {
 
 
-            Socket serverSocket = new Socket(hostName, portNumber);
+            Socket serverSocket = new Socket(hostName, port);
 
             PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
@@ -26,6 +29,7 @@ public class Client {
             String line = reader.readLine();
             while(line != null){
                 out.print(line);
+                out.flush();
                 System.out.println("Sent to server: " + line);
                 String answer = in.readLine();
                 System.out.println("Answer from server:" + answer);
