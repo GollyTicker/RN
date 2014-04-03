@@ -22,32 +22,28 @@ public class Server {
             //loop
             while(true){
                 Socket clientSocket = welcomeSocket.accept();
-                InputStreamReader is = new InputStreamReader(clientSocket.getInputStream());
+                //InputStreamReader is = new InputStreamReader(clientSocket.getInputStream());
+                InputStream is = clientSocket.getInputStream();
+                OutputStream out = clientSocket.getOutputStream();
 
-                PrintWriter out =
-                        new PrintWriter(clientSocket.getOutputStream(), true);
+              //  BufferedReader input = new BufferedReader(is);
 
-                BufferedReader input = new BufferedReader(is);
-
-                String line = input.readLine(); //getLineFromInputStream(is);
+                String line = readFromClient(is); //getLineFromInputStream(is);
                 while(line != null) {
                     System.out.println("Gelesen: " + line);
 
                     String resp = respondToCommand(line);
 
-                    out.println(resp);
-                    out.flush();
+                    sendToClient(resp,out);
+
+
 
                     if (resp.equals(CONNECTION_CLOSE)) {
                         clientSocket.close();
                         break;
                     }
-                    line = input.readLine(); //getLineFromInputStream(is);
-                    byte[] b = new byte[255];
-                    b = line.getBytes("UTF-8");
-                    String l2 = new String(b);
+                    line = readFromClient(is); //input.readLine(); //getLineFromInputStream(is);
 
-                    System.out.println("Equal?" + line.equals(l2));
                 }
             }
 
