@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -18,10 +16,9 @@ public class Client {
 /* todo Change BufferReader to ByteArray max 255bytes  */
 
 
-
         int port = 4444;
-       // String hostName = args[0];
-       // int portNumber = Integer.parseInt(args[1]);
+        // String hostName = args[0];
+        // int portNumber = Integer.parseInt(args[1]);
 
         String hostName = "127.0.0.1";
 
@@ -39,12 +36,12 @@ public class Client {
 
 
             // buffer reader read the input from StandartInput (in)
-            BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             // read the first line from standart input
 
             String line = reader.readLine();//
 
-            while(line != null){
+            while (line != null) {
                 // out send the line to the server
                 out.println(line);
                 out.flush();
@@ -56,7 +53,7 @@ public class Client {
                 line = reader.readLine();
             }
 
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
