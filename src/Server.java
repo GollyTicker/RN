@@ -6,11 +6,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private final String CONNECTION_CLOSE = "BYE";
-    private final String LOWERCASE = "LOWERCASE";
-    private final String UPPERRCASE = "UPPERCASE";
-    private final String REVERSE = "REVERSE";
-    private final String SHUTDOWN = "SHUTDOWN";
+    private final static String CONNECTION_CLOSE = "BYE";
+    private final static String LOWERCASE = "LOWERCASE";
+    private final static String UPPERCASE = "UPPERCASE";
+    private final static String REVERSE = "REVERSE";
+    private final static String SHUTDOWN = "SHUTDOWN";
 
     public static void  main(String[] args){
 
@@ -60,18 +60,18 @@ public class Server {
 
     }
 
-    String respondToCommand(String input) {
+    static String respondToCommand(String input) {
         if (input.startsWith(CONNECTION_CLOSE)) {
             return CONNECTION_CLOSE;
         }
         if (input.startsWith(LOWERCASE)) {
-            return input.getParam().toUpperCase();
+            return getParam(input).toUpperCase();
         }
         else if (input.startsWith(UPPERCASE)) {
-            return input.getParam().toLowerCase();
+            return getParam(input).toLowerCase();
         }
         else if (input.startsWith(REVERSE)) {
-            String str = inout.getParam();
+            String str = getParam(input);
             return new StringBuffer(str).reverse().toString();
         }
         else if (input.startsWith(SHUTDOWN)) {
@@ -85,7 +85,7 @@ public class Server {
     }
 
     // zu einem Kommando der Form "CMD <param>" liefert diese Methode das Param zurueck.
-    String getParam(String str) {
+    static String getParam(String str) {
         int seperator = str.indexOf(' ');
         if (seperator == -1) {
             return str;
@@ -94,5 +94,10 @@ public class Server {
             return str.substring(seperator + 1);
         }
     }
+
+    static String unknownCommand(String input){
+        return "ERROR 007:" + input;
+    }
+
 
 }
