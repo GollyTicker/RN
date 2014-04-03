@@ -27,7 +27,10 @@ public class Client {
 
             BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
             String line = reader.readLine();
+
+
             while(line != null){
+                System.out.println("0Client");
                 out.print(line);
                 out.flush();
                 System.out.println("Sent to server: " + line);
