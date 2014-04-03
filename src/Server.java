@@ -21,23 +21,15 @@ public class Server {
 
             //loop
             while(true){
-                //System.out.println("0");
-
                 Socket clientSocket = welcomeSocket.accept();
-                InputStream is = clientSocket.getInputStream();
-
-                //System.out.println("1");
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(is));
-
-                //System.out.println("2");
+                InputStreamReader is = new InputStreamReader(clientSocket.getInputStream());
 
                 PrintWriter out =
                         new PrintWriter(clientSocket.getOutputStream(), true);
 
-                //System.out.println("3");
+                BufferedReader input = new BufferedReader(is);
 
-                String line = in.readLine();
+                String line = input.readLine(); //getLineFromInputStream(is);
                 while(line != null) {
                     System.out.println("Gelesen: " + line);
 
@@ -50,7 +42,12 @@ public class Server {
                         clientSocket.close();
                         break;
                     }
-                    line = in.readLine();
+                    line = input.readLine(); //getLineFromInputStream(is);
+                    byte[] b = new byte[255];
+                    b = line.getBytes("UTF-8");
+                    String l2 = new String(b);
+
+                    System.out.println("Equal?" + line.equals(l2));
                 }
             }
 
@@ -65,10 +62,10 @@ public class Server {
             return CONNECTION_CLOSE;
         }
         if (input.startsWith(LOWERCASE)) {
-            return getParam(input).toUpperCase();
+            return getParam(input).toLowerCase();
         }
         else if (input.startsWith(UPPERCASE)) {
-            return getParam(input).toLowerCase();
+            return getParam(input).toUpperCase();
         }
         else if (input.startsWith(REVERSE)) {
             String str = getParam(input);
@@ -84,8 +81,18 @@ public class Server {
         }
     }
 
+    static String takeWhileNoNewLine(String str) {
+        int nl = str.indexOf('\\');
+        if(nl == -1) {
+            return str;
+        }
+
+        return str.substring(0, nl - 1);
+    }
+
     // zu einem Kommando der Form "CMD <param>" liefert diese Methode das Param zurueck.
     static String getParam(String str) {
+        str = takeWhileNoNewLine(str);
         int seperator = str.indexOf(' ');
         if (seperator == -1) {
             return str;
@@ -96,8 +103,66 @@ public class Server {
     }
 
     static String unknownCommand(String input){
-        return "ERROR 007:" + input;
+        return "ERROR " + input;
     }
+
+    static String getLineFromInputStream(InputStreamReader is){
+        String erg = "";
+        char[] input = new char[255];
+        try {
+            is.read(input);
+            erg = new String(input) + "\n";
+        } catch (IOException e) {
+            e.printStackTrace();
+            erg = null;
+        }
+
+        return erg;
+
+    }
+
+    static String readFromClient(InputStream input) {
+        int read;
+        byte[] byteArray = new byte[255];
+        boolean keepGo = true;
+
+        for(int i =0; i < byteArray.length && keepGo == true; i ++) {
+            try {
+                read =  input.read();
+                if(read == -1 || read == 10) {
+                    keepGo = false;
+                } else {
+                    byteArray[i] = (byte) read;
+                }
+            } catch (IOException e) {
+                keepGo = false;
+            }
+        }
+
+
+        try {
+            return (new String(byteArray,"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static void sendToClient(String message,OutputStream output){
+        try {
+
+            byte[] byteArray = (message + "\n").getBytes("UTF-8");
+            output.write(byteArray,0,byteArray.length);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+
 
 
 }
