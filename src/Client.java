@@ -31,7 +31,7 @@ public class Client {
 
             while(line != null){
                 System.out.println("0Client");
-                out.print(line);
+                out.println(line);
                 out.flush();
                 System.out.println("Sent to server: " + line);
                 String answer = in.readLine();

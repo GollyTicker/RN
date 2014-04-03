@@ -33,15 +33,12 @@ public class Server {
 
                 System.out.println("3");
 
-
-                //print output
-                String sTest = in.readLine();
-                System.out.println("4");
-
-
-                System.out.println("DAS IST INPUT STREAM;" + sTest);
-                out.print(sTest);
-                out.flush();
+                String line = in.readLine();
+                while(line != null) {
+                    System.out.println("DAS IST INPUT Line" + sTest);
+                    out.println(sTest);
+                    out.flush();
+                }
                 clientSocket.close();
             }
 
