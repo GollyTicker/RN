@@ -43,6 +43,11 @@ public class Server {
                         break;
                     }
                     line = input.readLine(); //getLineFromInputStream(is);
+                    byte[] b = new byte[255];
+                    b = line.getBytes("UTF-8");
+                    String l2 = new String(b);
+
+                    System.out.println("Equal?" + line.equals(l2));
                 }
             }
 
@@ -115,6 +120,49 @@ public class Server {
         return erg;
 
     }
+
+    static String readFromClient(InputStream input) {
+        int read;
+        byte[] byteArray = new byte[255];
+        boolean keepGo = true;
+
+        for(int i =0; i < byteArray.length && keepGo == true; i ++) {
+            try {
+                read =  input.read();
+                if(read == -1 || read == 10) {
+                    keepGo = false;
+                } else {
+                    byteArray[i] = (byte) read;
+                }
+            } catch (IOException e) {
+                keepGo = false;
+            }
+        }
+
+
+        try {
+            return (new String(byteArray,"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static void sendToClient(String message,OutputStream output){
+        try {
+
+            byte[] byteArray = (message + "\n").getBytes("UTF-8");
+            output.write(byteArray,0,byteArray.length);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+
 
 
 }
