@@ -1,3 +1,7 @@
+package ServerPackage;
+
+import ServerPackage.ServerOperations;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

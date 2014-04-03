@@ -1,4 +1,4 @@
-/**
+package ServerPackage; /**
  * Created by Allquantor on 02.04.14.
  */
 
