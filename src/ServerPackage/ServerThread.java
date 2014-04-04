@@ -1,7 +1,5 @@
 package ServerPackage;
 
-import ServerPackage.ServerOperations;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,35 +13,40 @@ public class ServerThread extends Thread {
 
     Socket clientSocket;
 
+
     public ServerThread(Socket socket) {
         clientSocket = socket;
-
-
     }
 
     public void run() {
         try {
+
             InputStream is = clientSocket.getInputStream();
             OutputStream out = clientSocket.getOutputStream();
             // read first line
             String line = readFromClient(is);
 
             while (line != null) {
-                System.out.println("Gelesen: " + line);
+                System.out.println(getClass().getName());
+                System.out.println("ServerThread:Gelesen= " + line);
 
                 String resp = ServerOperations.respondToCommand(line);
 
-                System.out.println("RESPOND TO COMMAND:" + resp + "länge" + resp.length());
                 sendToClient(resp, out);
-                if (resp.equals(ServerOperations.CONNECTION_CLOSE)) {
+
+                if (resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE)) {
+                    is.close();
+                    out.close();
                     clientSocket.close();
+                    line = null;
                     break;
                 }
                 line = readFromClient(is);
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // thread wird beendet
+            ServerOperations.threadAnzahlDecrease();
         }
     }
 
@@ -83,7 +86,6 @@ public class ServerThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 }

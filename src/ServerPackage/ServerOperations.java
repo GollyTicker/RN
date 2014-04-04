@@ -11,10 +11,12 @@ public class ServerOperations {
     public final static String REVERSE = "REVERSE";
     public final static String SHUTDOWN = "SHUTDOWN";
 
-    private ServerOperations() {
-    }
+    public final static String SHUTDOWN_RESPONSE = "SHUTDOWN OK!";
 
-    ;
+    public static volatile boolean running = true;
+    private static volatile int threadAnzahl = 0;
+
+    private ServerOperations(){}
 
     public static String respondToCommand(String input) {
         if (input.startsWith(CONNECTION_CLOSE)) {
@@ -27,14 +29,16 @@ public class ServerOperations {
         } else if (input.startsWith(REVERSE)) {
             String str = getParam(input);
             //java.util.Collections.reverse(str.toCharArray()));
-            String reversed = reverse(str); //(new StringBuffer(str)).reverse().toString();
-            System.out.println("input: " + str + ";");
-            System.out.println("reversed: " + reversed + ";");
+            String reversed = reverse(str);
+            //System.out.println("input: " + str + ";");
+            //System.out.println("reversed: " + reversed + ";");
             return reversed;
         } else if (input.startsWith(SHUTDOWN)) {
             String pw = getParam(input);
-            // what to do here?
-            return "yeah... shutdown?";
+
+            //ONLY IF THE PW IS TRUE
+            setShutdown();
+            return SHUTDOWN_RESPONSE;
         } else {
             return unknownCommand(input);
         }
@@ -56,12 +60,6 @@ public class ServerOperations {
     }
 
     private static String reverse(String str) {
-        /*String reverse = "";
-        int length = str.length();
-        for( int i = length - 1 ; i >= 0 ; i-- ) {
-            reverse = reverse + str.charAt(i);
-        }
-        return reverse;*/
         return (new StringBuffer(str)).reverse().toString();
     }
 
@@ -70,8 +68,24 @@ public class ServerOperations {
         if (nl == -1) {
             return str;
         }
-
         return str.substring(0, nl - 1);
     }
 
+    //if running false => server didn't accept
+    //new clients!
+    static private void setShutdown(){
+        running = false;
+    }
+
+    static public int threadAnzahl() {
+        return threadAnzahl;
+    }
+
+    static public void threadAnzahlIncrease() {
+        threadAnzahl++;
+    }
+
+    static public void threadAnzahlDecrease() {
+        threadAnzahl--;
+    }
 }
