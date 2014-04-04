@@ -2,6 +2,7 @@ package ServerPackage;
 
 /**
  * Created by Allquantor on 03.04.14.
+ * RN_1
  */
 
 public class ServerOperations {

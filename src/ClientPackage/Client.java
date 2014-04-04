@@ -12,6 +12,7 @@ import static java.lang.System.in;
 
 /**
  * Created by Allquantor on 02.04.14.
+ * RN_1
  */
 public class Client {
 
@@ -77,6 +78,7 @@ public class Client {
 
     private static void closeConnection() {
         try {
+            //catch.... ahmm close them all!
             writerSendOut.close();
             serverSocket.close();
             bufferStdInput.close();

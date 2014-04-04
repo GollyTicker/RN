@@ -8,6 +8,7 @@ import java.net.Socket;
 
 /**
  * Created by Allquantor on 03.04.14.
+ * RN_1
  */
 public class ServerThread extends Thread {
 
@@ -48,6 +49,8 @@ public class ServerThread extends Thread {
         System.out.println("ServerThread:Connection refused and thread ID=" + this.threadID + " stopped");
 
     }
+
+
 
     boolean isConnectionClosed(String resp){
         return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE);

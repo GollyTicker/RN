@@ -1,5 +1,6 @@
 package ServerPackage; /**
  * Created by Allquantor on 02.04.14.
+ * RN_1
  */
 
 import java.io.IOException;
@@ -50,10 +51,13 @@ public class Server {
 
     }
 
+
+    //if shutdown or more than MAX_CONNECTION then cant accept more
     private static boolean readyToAcceptNewConnection() {
         return ServerOperations.running && ServerOperations.threadAnzahl() <= MAX_CONNECTIONS;
     }
 
+    //close all sockets
     private static void closeConnection() {
         try {
             System.out.println("Server: starting shutdown process");
