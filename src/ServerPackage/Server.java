@@ -26,9 +26,12 @@ public class Server {
             try {
                 clientSocket = welcomeSocket.accept();
                 ServerOperations.threadAnzahlIncrease();
-                (new ServerThread(clientSocket)).start();
+
+                new ServerThread(clientSocket,ServerOperations.threadAnzahl()).run();
             } catch (IOException e) {
-                e.printStackTrace();
+                closeConnection();
+
+               // e.printStackTrace();
             }
         }
         //Shutdown

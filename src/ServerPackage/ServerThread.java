@@ -12,53 +12,66 @@ import java.net.Socket;
 public class ServerThread extends Thread {
 
     Socket clientSocket;
+    final int threadID;
+    InputStream inputStream;
+    OutputStream outputStream;
 
 
-    public ServerThread(Socket socket) {
+    public ServerThread(Socket socket,int threadID) {
         clientSocket = socket;
+        this.threadID = threadID;
     }
 
-    public void run() {
+    private void initializeThread(){
         try {
-
-            InputStream is = clientSocket.getInputStream();
-            OutputStream out = clientSocket.getOutputStream();
-            // read first line
-            String line = readFromClient(is);
-
-            while (line != null) {
-                System.out.println(getClass().getName());
-                System.out.println("ServerThread:Gelesen= " + line);
-
-                String resp = ServerOperations.respondToCommand(line);
-
-                sendToClient(resp, out);
-
-                if (resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE)) {
-                    is.close();
-                    out.close();
-                    clientSocket.close();
-                    line = null;
-                    break;
-                }
-                line = readFromClient(is);
-
-            }
+            inputStream = clientSocket.getInputStream();
+            outputStream = clientSocket.getOutputStream();
         } catch (IOException e) {
-            // thread wird beendet
-            ServerOperations.threadAnzahlDecrease();
+            e.printStackTrace();
         }
     }
 
+    public void run() {
 
-    static String readFromClient(InputStream input) {
+        initializeThread();
+        String resp = null;
+
+        do {
+            String line = readFromClient();
+            System.out.println("ServerThread:Gelesen= " + line);
+            resp = ServerOperations.respondToCommand(line);
+            sendToClient(resp);
+
+        } while (!isConnectionClosed(resp));
+
+        closeConnectionAndStopThread();
+        System.out.println("ServerThread:Connection refused and thread ID=" + this.threadID + " stopped");
+
+    }
+
+    boolean isConnectionClosed(String resp){
+        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE);
+    }
+
+
+    void closeConnectionAndStopThread(){
+        try {
+            inputStream.close();
+            outputStream.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+     String readFromClient() {
         int read;
         byte[] byteArray = new byte[255];
         boolean keepGo = true;
 
         for (int i = 0; i < byteArray.length && keepGo == true; i++) {
             try {
-                read = input.read();
+                read = inputStream.read();
                 if (read == -1 || read == 10) {
                     keepGo = false;
                 } else {
@@ -72,16 +85,16 @@ public class ServerThread extends Thread {
         try {
             return (new String(byteArray, "UTF-8")).trim();
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             return null;
+            //e.printStackTrace();
         }
     }
 
-    static void sendToClient(String message, OutputStream output) {
+     void sendToClient(String message) {
         try {
 
             byte[] byteArray = (message + "\n").getBytes("UTF-8");
-            output.write(byteArray, 0, byteArray.length);
+            outputStream.write(byteArray, 0, byteArray.length);
 
         } catch (IOException e) {
             e.printStackTrace();
