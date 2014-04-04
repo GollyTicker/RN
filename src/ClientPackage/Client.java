@@ -41,29 +41,25 @@ public class Client {
 
     public static void runClient() {
 
+        String answer = null;
         try {
 
-            //read first Line
-            String line = bufferStdInput.readLine();//
-
-
-            while (line != null) {
+            do {
+                // read the next input from the standart IO
+                String line = bufferStdInput.readLine();
                 // out send the line to the server
                 writerSendOut.println(line);
                 writerSendOut.flush();
                 System.out.println("Client:sent to server=" + line);
 
-                // we wait of a answer from the server
-                String answer = bufferResponse.readLine();
+                // we get a response from server
+                answer = bufferResponse.readLine();
                 System.out.println("Client:answer from server=" + answer);
-                //check refuse message,disconnect
-                if(!IsServerReady(answer)){
-                    closeConnection();
-                    break;
-                }
-                // read the next input from the standart IO
-                line = bufferStdInput.readLine();
-            }
+
+                //check response message
+            } while (IsServerReady(answer));
+            closeConnection();
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,7 +69,7 @@ public class Client {
     }
 
     public static boolean IsServerReady(String message) {
-       return (!(message.equals(ServerOperations.SHUTDOWN_RESPONSE) || (message.equals(ServerOperations.CONNECTION_CLOSE))));
+        return (!(message.equals(ServerOperations.SHUTDOWN_RESPONSE) || (message.equals(ServerOperations.CONNECTION_CLOSE))));
     }
 
     private static void closeConnection() {

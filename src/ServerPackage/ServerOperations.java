@@ -5,6 +5,8 @@ package ServerPackage;
  * RN_1
  */
 
+
+//Utility Class
 public class ServerOperations {
     public final static String CONNECTION_CLOSE = "BYE";
     public final static String LOWERCASE = "LOWERCASE";
