@@ -53,7 +53,7 @@ public class ServerThread extends Thread {
 
 
     boolean isConnectionClosed(String resp){
-        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE);
+        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE) || clientSocket.isClosed();
     }
 
 
@@ -62,6 +62,8 @@ public class ServerThread extends Thread {
             inputStream.close();
             outputStream.close();
             clientSocket.close();
+            //decrease thread anzahl
+            ServerOperations.threadAnzahlDecrease();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,6 +77,7 @@ public class ServerThread extends Thread {
         for (int i = 0; i < byteArray.length && keepGo == true; i++) {
             try {
                 read = inputStream.read();
+
                 if (read == -1 || read == 10) {
                     keepGo = false;
                 } else {
@@ -82,6 +85,7 @@ public class ServerThread extends Thread {
                 }
             } catch (IOException e) {
                 keepGo = false;
+                return null;
             }
         }
 
@@ -95,11 +99,12 @@ public class ServerThread extends Thread {
 
      void sendToClient(String message) {
         try {
-
             byte[] byteArray = (message + "\n").getBytes("UTF-8");
+
             outputStream.write(byteArray, 0, byteArray.length);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+            closeConnectionAndStopThread();
             e.printStackTrace();
         }
 

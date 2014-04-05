@@ -31,7 +31,6 @@ public class Server {
                 new ServerThread(clientSocket,ServerOperations.threadAnzahl()).run();
             } catch (IOException e) {
                 closeConnection();
-
                // e.printStackTrace();
             }
         }
