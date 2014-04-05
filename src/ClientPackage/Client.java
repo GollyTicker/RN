@@ -47,10 +47,7 @@ public class Client {
             do {
                 // read the next input from the standart IO
                 String line = bufferStdInput.readLine();
-                // to avoid exception
-                if (line == null || !IsServerReady(answer)) {
-                    break;
-                }
+
                 // out send the line to the server
                 writerSendOut.println(line);
                 writerSendOut.flush();
