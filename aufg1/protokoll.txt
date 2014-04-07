@@ -56,7 +56,23 @@ Teil 1:
     1008 bytes from 141.22.80.68: icmp_seq=0 ttl=128 time=4.192 ms
     Durchschnittlich:
     13.383 ms
-
+    
+    Durchschnitt aus 10x zu lab22:
+    ping -c 1 -s 1000 1lab22
+    PING lab22.cpt.haw-hamburg.de (141.22.27.101) 1000(1028) bytes of data.
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.519 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.254 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.295 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.277 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.280 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.289 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.271 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.271 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.271 ms
+    1008 bytes from lab22.cpt.haw-hamburg.de (141.22.27.101): icmp_seq=1ttl=64 time=0.271 ms
+    Durchschnittlich:
+    0.300 ms
+    
 3.
     Befehl: (http://www.cyberciti.biz/faq/find-out-which-service-listening-specific-port/)
     sudo lsof -i :9400
