@@ -12,7 +12,7 @@ public class Server {
     static ServerSocket welcomeSocket;
     static Socket clientSocket;
 
-    public static void initializeServer(int port) {
+    public void initializeServer(int port) {
         try {
             welcomeSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -20,31 +20,34 @@ public class Server {
         }
     }
 
-    public static void runServer() {
+    public void runServer() {
 
 
         while (readyToAcceptNewConnection()) {
             try {
                 clientSocket = welcomeSocket.accept();
                 ServerOperations.threadAnzahlIncrease();
+                new ServerThread(clientSocket, ServerOperations.threadAnzahl()).start();
 
-                new ServerThread(clientSocket,ServerOperations.threadAnzahl()).run();
             } catch (IOException e) {
                 closeConnection();
-               // e.printStackTrace();
+                // e.printStackTrace();
             }
         }
         //Shutdown
         if (!ServerOperations.running) closeConnection();
+
+
     }
 
 
     public static void main(String[] args) {
         //int port = Integer.parseInt(args[0]);
         int port = 4444;
-        initializeServer(port);
+        Server s = new Server();
+        s.initializeServer(port);
 
-        runServer();
+        s.runServer();
 
         //maybe a main loop for the process and if shutdown destroy the object?
 
@@ -52,12 +55,12 @@ public class Server {
 
 
     //if shutdown or more than MAX_CONNECTION then cant accept more
-    private static boolean readyToAcceptNewConnection() {
+    private boolean readyToAcceptNewConnection() {
         return ServerOperations.running && ServerOperations.threadAnzahl() <= MAX_CONNECTIONS;
     }
 
     //close all sockets
-    private static void closeConnection() {
+    private void closeConnection() {
         try {
             System.out.println("Server: starting shutdown process");
             welcomeSocket.close();

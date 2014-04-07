@@ -54,6 +54,7 @@ public class Client {
                 System.out.println("Client:sent to server=" + line);
 
                 // we get a response from server
+                if(serverSocket.isClosed()) break;
                 answer = bufferResponse.readLine();
                 System.out.println("Client:answer from server=" + answer);
 

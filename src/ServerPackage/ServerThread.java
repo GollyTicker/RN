@@ -41,6 +41,7 @@ public class ServerThread extends Thread {
             do {
 
                 String line = readFromClient();
+                if(line == null) break;
                 System.out.println("ServerThread:Gelesen= " + line);
                 resp = ServerOperations.respondToCommand(line);
                 sendToClient(resp);
@@ -50,14 +51,13 @@ public class ServerThread extends Thread {
 
         closeConnectionAndStopThread();
         System.out.println("ServerThread:Connection refused and thread ID=" + this.threadID + " stopped");
-      //  ServerOperations.threadAnzahlDecrease();
-
+        ServerOperations.threadAnzahlDecrease();
     }
 
 
 
     boolean isConnectionClosed(String resp){
-        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE) || clientSocket.isClosed();
+        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE) || clientSocket.isClosed() || !clientSocket.isConnected();
     }
 
 
