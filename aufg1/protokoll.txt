@@ -1,7 +1,5 @@
 
 
-
-
 Teil 1:
 
 1. ifconfig:
@@ -83,8 +81,20 @@ Teil 1:
     .... (mehr für weitere Webseiten)
 
     Chrome.exe verwendet TCP in seiner Transportschicht.
+    
+    Auf dem labrechner:
+    auf port 9400
 
+    (abk614@lab27)~>lsof -i :9400
+    COMMAND    PID   USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+    rn11serve 3406 abk614    3u  IPv4  14227      0t0  UDP *:sec-t4net-srv
 
+    Es handelt sich um UDP
+    
+    strace -p 3406
+    recvfrom(3, ....
+    
+    Es wartet auf die Ankunft eines Pakets.
 
 4. 
     Socat:
@@ -114,10 +124,28 @@ Teil 1:
     weil wir das Port 80 vernwenden und die Antwort ein HTML-Dokument ist.
 
 5.
-
+    (abk614@lab27)~>ssh -X abk614@lab37
+    The authenticity of host 'lab37 (141.22.27.85)' can't be established.
+    ECDSA key fingerprint is 06:1f:46:dd:43:98:f4:8d:33:7f:01:cc:f9:81:cb:59.
+    Are you sure you want to continue connecting (yes/no)? yes
+    Warning: Permanently added 'lab37,141.22.27.85' (ECDSA) to the list of
+    known hosts.
+    Password:
+    Last login: Mon Apr  7 10:33:43 2014 from console
+    Have a lot of fun...
+    executing .bashrc
+    (abk614@lab37)~>konqueror /tmp
+    kbuildsycoca running...
+    DCOP Cleaning up dead connections.
+    libpng warning: iCCP: known incorrect sRGB profile
+     <Konqueror öffnet sich >
+    (abk614@lab37)~>exit
+    logout
+    Connection to lab37 closed.
+    
+    -X leitet die "Fensteraufgabe" auf den eigenen Rechner um.
+    
 
 Teil 2:
-
-Entwurf:
 
 
