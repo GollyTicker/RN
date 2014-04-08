@@ -24,15 +24,19 @@ public class Server {
 
 
         while (readyToAcceptNewConnection()) {
-            try {
-                clientSocket = welcomeSocket.accept();
-                ServerOperations.threadAnzahlIncrease();
-                new ServerThread(clientSocket, ServerOperations.threadAnzahl()).start();
+            if (ServerOperations.threadAnzahl() <= MAX_CONNECTIONS) {
+                try {
+                    clientSocket = welcomeSocket.accept();
+                    ServerOperations.threadAnzahlIncrease();
+                    new ServerThread(clientSocket, ServerOperations.threadAnzahl()).start();
 
-            } catch (IOException e) {
-                closeConnection();
-                // e.printStackTrace();
+                } catch (IOException e) {
+                    closeConnection();
+                    // e.printStackTrace();
+                }
             }
+
+
         }
         //Shutdown
         if (!ServerOperations.running) closeConnection();
@@ -56,7 +60,7 @@ public class Server {
 
     //if shutdown or more than MAX_CONNECTION then cant accept more
     private boolean readyToAcceptNewConnection() {
-        return ServerOperations.running && ServerOperations.threadAnzahl() <= MAX_CONNECTIONS;
+        return ServerOperations.running;
     }
 
     //close all sockets
