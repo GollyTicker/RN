@@ -1,0 +1,13 @@
+- der Server Host lauscht normalerweise den Port 110
+wir konfigurieren aber 1100 wegen den root rechten
+
+- wenn die connection steht schickt pop3 server eine begrüßung
+
+- jetzt können commandos ausgetauscht werden
+
+- commandos sind case sensetive
+
+- commandos enthalten ein oder mehrere args
+
+
+
