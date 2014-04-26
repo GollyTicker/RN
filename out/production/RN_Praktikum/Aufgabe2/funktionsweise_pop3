@@ -23,8 +23,6 @@ sind weiter interaktionen möglich
 - wenn der client QUIT schickt, responsed der server mit goodbye
 dann kann die tcp verbindung geschlossen werden
 
--
-
 
 
 
