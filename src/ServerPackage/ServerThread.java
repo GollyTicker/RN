@@ -37,23 +37,27 @@ public class ServerThread extends Thread {
         initializeThread();
         String resp = null;
 
-        do {
-            String line = readFromClient();
-            System.out.println("ServerThread:Gelesen= " + line);
-            resp = ServerOperations.respondToCommand(line);
-            sendToClient(resp);
+        if(!clientSocket.isClosed()) {
+            do {
 
-        } while (!isConnectionClosed(resp));
+                String line = readFromClient();
+                if(line == null) break;
+                System.out.println("ServerThread:Gelesen= " + line);
+                resp = ServerOperations.respondToCommand(line);
+                sendToClient(resp);
+
+            } while (!isConnectionClosed(resp));
+        }
 
         closeConnectionAndStopThread();
         System.out.println("ServerThread:Connection refused and thread ID=" + this.threadID + " stopped");
-
+        ServerOperations.threadAnzahlDecrease();
     }
 
 
 
     boolean isConnectionClosed(String resp){
-        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE);
+        return resp.equals(ServerOperations.CONNECTION_CLOSE) || resp.equals(ServerOperations.SHUTDOWN_RESPONSE) || clientSocket.isClosed() || !clientSocket.isConnected();
     }
 
 
@@ -62,6 +66,7 @@ public class ServerThread extends Thread {
             inputStream.close();
             outputStream.close();
             clientSocket.close();
+            //decrease thread anzahl
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,6 +80,7 @@ public class ServerThread extends Thread {
         for (int i = 0; i < byteArray.length && keepGo == true; i++) {
             try {
                 read = inputStream.read();
+
                 if (read == -1 || read == 10) {
                     keepGo = false;
                 } else {
@@ -82,6 +88,7 @@ public class ServerThread extends Thread {
                 }
             } catch (IOException e) {
                 keepGo = false;
+                return null;
             }
         }
 
@@ -96,11 +103,20 @@ public class ServerThread extends Thread {
      void sendToClient(String message) {
         try {
 
-            byte[] byteArray = (message + "\n").getBytes("UTF-8");
-            outputStream.write(byteArray, 0, byteArray.length);
+            //System.out.println("ClientSocket is connected:" + clientSocket.isConnected());
+            //System.out.println("ClientSocket is closed:" + clientSocket.isConnected());
+            //System.out.println("ClientSocket is bound:" + clientSocket.isBound());
+            //System.out.println("ClientSocket is inputS:" + clientSocket.isInputShutdown());
+            //System.out.println("ClientSocket is outputS:" + clientSocket.isOutputShutdown());
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            if(!clientSocket.isClosed()){
+                byte[] byteArray = (message + "\n").getBytes("UTF-8");
+                outputStream.write(byteArray, 0, byteArray.length);
+            }
+
+        } catch (Exception e) {
+            closeConnectionAndStopThread();
+           // e.printStackTrace();
         }
 
     }

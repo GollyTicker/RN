@@ -47,12 +47,14 @@ public class Client {
             do {
                 // read the next input from the standart IO
                 String line = bufferStdInput.readLine();
+
                 // out send the line to the server
                 writerSendOut.println(line);
                 writerSendOut.flush();
                 System.out.println("Client:sent to server=" + line);
 
                 // we get a response from server
+                if(serverSocket.isClosed()) break;
                 answer = bufferResponse.readLine();
                 System.out.println("Client:answer from server=" + answer);
 
@@ -84,6 +86,7 @@ public class Client {
         }
 
     }
+
 
     public static void main(String[] args) {
 
